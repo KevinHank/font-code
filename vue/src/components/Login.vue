@@ -16,6 +16,7 @@
 </template>
 
 <script>
+  import router from "../router";
   export default {
     name: "Ulogin.vue",
     data() {
@@ -56,7 +57,10 @@
       handleSubmit2(ruleForm2) {
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            alert('提交！')
+            //alert('提交！')
+            router.replace({
+              path: "/dashboard"
+            });
           } else {
             alert('登陆失败！');
             console.log('error submit!!');
