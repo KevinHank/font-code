@@ -17,8 +17,8 @@
 
 <script>
   import router from "../router";
+  import {mapMutations, mapActions, mapState} from 'vuex'
   export default {
-    name: "Ulogin.vue",
     data() {
       var checkAccount = (rule, value, callback) => {
         if (!value) {
@@ -54,10 +54,17 @@
       };
     },
     methods: {
+      ...mapMutations('userLogin', [
+
+      ]),
+      ...mapActions('userLogin', [
+        'getLoginCustomerInfo'
+      ]),
       handleSubmit2(ruleForm2) {
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
             //alert('提交！')
+            this.getLoginCustomerInfo();
             router.replace({
               path: "/dashboard"
             });
@@ -68,6 +75,19 @@
           }
         });
       }
+    },
+    computed: { 
+      ...mapState({
+        loginState: state => state.userLogin.loginState
+      })
+    },
+    created : function() {
+      //如果已经登录, 直接跳到大厦board
+      if (this.loginState) {
+        router.replace({
+          path: "/dashboard"
+        });
+      } 
     }
   }
 </script>
