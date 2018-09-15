@@ -64,7 +64,7 @@
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
             //alert('提交！')
-            this.getLoginCustomerInfo();
+            //this.getLoginCustomerInfo();
             router.replace({
               path: "/dashboard"
             });

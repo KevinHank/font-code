@@ -1,65 +1,63 @@
 <template>
-	<div class='page-topbar'>
-		<div class='quick-area'>
-			<div class='pull-left'>
-				<ul class="info-menu left-links list-inline list-unstyled">
-					<li class="sidebar-toggle-wrap">
-						<a href="javascript:void(0)"   class="sidebar_toggle">
-						<i class="fa fa-bars"></i>
-						</a>
-					</li>
-				</ul>
-			</div>
-			<div class='pull-right' style="margin-right:50px;">
-				<ul class="info-menu right-links list-inline list-unstyled">
-					<li class="profile showopacity">
-						<a href="#" data-toggle="dropdown" class="toggle">
-							<span>用户名: {{customer.name}} <i class="fa fa-angle-down"></i></span>
-						</a>
-						<ul class="dropdown-menu profile animated fadeIn">
-							<li class="last">
-								<a href="javascript:void(0)" @click="logout">
-									<i class="fa fa-lock"></i> 登出
-								</a>
-							</li>
-						</ul>
-					</li>
+  <el-container>
+    <el-header style="text-align: right; font-size: 12px">
+      <el-dropdown>
+        <i class="el-icon-setting" style="margin-right: 15px"></i>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item @click="logout">退出</el-dropdown-item>
+          <el-dropdown-item>新增</el-dropdown-item>
+          <el-dropdown-item>删除</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+      <span>{{customer.name}}</span>
+    </el-header>
 
-				</ul>
-			</div>
-		</div>
-	</div>
+    <el-main>
+      <router-view></router-view>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
-	import {mapGetters, mapState, mapActions} from 'vuex'
-	import axios from 'axios';
-	import router from '../router';
-	export default {
-		data() {
-			return {
+  import {
+    mapGetters,
+    mapState,
+    mapActions
+  } from 'vuex'
+  import axios from 'axios';
+  import router from '../router';
+  export default {
+    data() {
+      const item = {
+        date: '2016-05-02',
+        name: '王小虎',
+        address: '上海市普陀区金沙江路 1518 弄'
+      };
+      return {
+        tableData: Array(20).fill(item)
+      }
+    },
+    methods: {
+      ...mapActions('userLogin', [
+        'exitSys'
+      ]),
+      logout() {
+        console.log('logout')
+        this.exitSys();
 
-			}
-		},
-		methods: {
-            ...mapActions('userLogin', [
-                'exitSys'
-            ]),
-			logout() {
-                this.exitSys();
-                
-                //到登录页面
-                router.replace({
-                    path: "/"
-                });
-			}
-		},
-		computed: {
-			...mapState({
-				'customer' : state => state.userLogin.customer,
-			})
-		}
-	}
+        //到登录页面
+        router.replace({
+          path: "/"
+        });
+      }
+    },
+    computed: {
+      ...mapState({
+        'customer': state => state.userLogin.customer,
+      })
+    }
+  }
+
 </script>
 
 <style lang="scss" scoped>
@@ -71,9 +69,11 @@
     display: flex;
     align-items: center;
     height: 60px;
+
     a {
       color: #fff;
       text-decoration: none;
     }
   }
+
 </style>

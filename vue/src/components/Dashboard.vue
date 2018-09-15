@@ -1,7 +1,7 @@
 <template>
 	<div>
+    000
 		<topbar>
-		
 		</topbar>
 		<div class="page-container row-fluid container-fluid">
 			<sidebar>
@@ -48,12 +48,14 @@ export default{
     })
   },
   created : function() {
+    console.log('9999090')
     //如果已经登录, 直接跳到大厦board
-    if (this.loginState) {
-      router.replace({
-        path: "/dashboard"
-      });
-    } 
+    // if (this.loginState) {
+    //   router.replace({
+    //     path: "/dashboard"
+    //   });
+    // } 
+    this.getLoginCustomerInfo();
   }
 }
 
