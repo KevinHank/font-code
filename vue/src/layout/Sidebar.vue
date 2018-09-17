@@ -25,7 +25,8 @@
 <script>
   import {
     mapGetters,
-    mapState
+    mapState,
+    mapActions
   } from 'vuex'
   import axios from "axios"
   import router from '../router';
@@ -46,6 +47,9 @@
       }
     },
     methods: {
+      ...mapActions('userLogin', [
+        'getLoginCustomerInfo'
+      ]),
       handleOpen(key, keyPath) {
         //console.log(key, keyPath);
       },
@@ -64,12 +68,6 @@
         }
 
       },
-
-      //退出
-      logout() {
-
-      },
-
     },
     computed: {
       ...mapState({
@@ -77,7 +75,9 @@
         "menus": state => state.userLogin.nodes,
       }),
     },
-    mounted: function () {}
+    mounted: function () {
+      this.getLoginCustomerInfo();
+    }
   }
 
 </script>

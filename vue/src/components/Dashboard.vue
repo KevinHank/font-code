@@ -48,14 +48,14 @@ export default{
     })
   },
   created : function() {
-    console.log('9999090')
+    console.log('5050')
     //如果已经登录, 直接跳到大厦board
     // if (this.loginState) {
     //   router.replace({
     //     path: "/dashboard"
     //   });
     // } 
-    this.getLoginCustomerInfo();
+    //this.getLoginCustomerInfo();
   }
 }
 

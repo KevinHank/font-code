@@ -2,11 +2,11 @@
   <el-form :model="ruleForm2" :rules="rules2" ref="ruleForm2" label-position="left" label-width="0px"
            class="demo-ruleForm login-container">
     <h3 class="title">系统登录</h3>
-    <el-form-item prop="account">
-      <el-input type="text" v-model="ruleForm2.account" auto-complete="off" placeholder="账号"></el-input>
+    <el-form-item prop="name">
+      <el-input type="text" v-model="ruleForm2.name" auto-complete="off" placeholder="账号"></el-input>
     </el-form-item>
-    <el-form-item prop="checkPass">
-      <el-input type="password" v-model="ruleForm2.checkPass" auto-complete="off" placeholder="密码"></el-input>
+    <el-form-item prop="password">
+      <el-input type="password" v-model="ruleForm2.password" auto-complete="off" placeholder="密码"></el-input>
     </el-form-item>
     <el-form-item style="width:100%;">
       <el-button type="primary" style="width:100%;" @click.native.prevent="handleSubmit2" >登录
@@ -17,6 +17,9 @@
 
 <script>
   import router from "../router";
+  import axios from "axios";
+  import qs from 'qs';
+  import global from '../components/globalParam.vue'
   import {mapMutations, mapActions, mapState} from 'vuex'
   export default {
     data() {
@@ -40,14 +43,14 @@
       };
       return {
         ruleForm2: {
-          account: '',
-          checkPass: ''
+          name: '',
+          password: ''
         },
         rules2: {
-          account: [
+          name: [
             {validator: checkAccount, trigger: 'blur'},
           ],
-          checkPass: [
+          password: [
             {validator: checkPass, trigger: 'blur'},
           ]
         }
@@ -63,15 +66,25 @@
       handleSubmit2(ruleForm2) {
         this.$refs.ruleForm2.validate((valid) => {
           if (valid) {
-            //alert('提交！')
             //this.getLoginCustomerInfo();
-            router.replace({
-              path: "/dashboard"
-            });
+            axios.post(global.urlPrefix + "/login/userLogin", qs.stringify(this.ruleForm2))
+              .then(response => {
+                if (response.data.returnResult) {
+                  router.replace({
+                    path: "/system"
+                  });
+                }
+              }, error => {
+                this.$notify.error({
+                  title: "提示",
+                  message: "登录失败"
+                });
+              })
           } else {
-            alert('登陆失败！');
-            console.log('error submit!!');
-            return false;
+            this.$notify.error({
+              title: "提示",
+              message: "登录失败"
+            });
           }
         });
       }
@@ -82,12 +95,7 @@
       })
     },
     created : function() {
-      //如果已经登录, 直接跳到大厦board
-      if (this.loginState) {
-        router.replace({
-          path: "/dashboard"
-        });
-      } 
+      
     }
   }
 </script>

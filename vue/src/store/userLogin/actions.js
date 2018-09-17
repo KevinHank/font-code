@@ -147,10 +147,5 @@ export default{
             }
         ]
         commit(type.MENU_LIST, menuList);
-    },
-    
-    exitSys({commit}) {
-        commit(type.LOGINED, false);
-        commit(type.USER_INFO, {});
     }
 };

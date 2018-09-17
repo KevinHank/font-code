@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <!-- <img src="./assets/logo.png"> -->
-    发放撒
     <router-view/>
   </div>
 </template>

@@ -1,12 +1,10 @@
 <template>
   <el-container>
     <el-header style="text-align: right; font-size: 12px">
-      <el-dropdown>
+      <el-dropdown @command="command">
         <i class="el-icon-setting" style="margin-right: 15px"></i>
         <el-dropdown-menu slot="dropdown">
-          <el-dropdown-item @click="logout">退出</el-dropdown-item>
-          <el-dropdown-item>新增</el-dropdown-item>
-          <el-dropdown-item>删除</el-dropdown-item>
+          <el-dropdown-item command="logout">退出</el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
       <span>{{customer.name}}</span>
@@ -24,8 +22,11 @@
     mapState,
     mapActions
   } from 'vuex'
+
   import axios from 'axios';
   import router from '../router';
+  import global from "../components/globalParam.vue"
+
   export default {
     data() {
       const item = {
@@ -38,17 +39,21 @@
       }
     },
     methods: {
-      ...mapActions('userLogin', [
-        'exitSys'
-      ]),
+      command(value) {
+        switch(value) {
+          case 'logout':
+            this.logout();
+        }
+      },
       logout() {
-        console.log('logout')
-        this.exitSys();
-
-        //到登录页面
-        router.replace({
-          path: "/"
-        });
+        axios.post(global.urlPrefix + "/login/logOut")
+          .then(response => {
+            if (response.data.returnResult) {
+                router.replace({
+                  path: "/login"
+                });
+            }
+          })
       }
     },
     computed: {

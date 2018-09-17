@@ -11,7 +11,7 @@ import axios from 'axios';
 
 Vue.use(Router)
 
-
+import global from "../components/globalParam.vue"
 export const constantRouterMap = [
 	{
 	  path: '/login', component: Login, name: 'login'
@@ -33,57 +33,35 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   console.log('to.path: ', to.path);
-	if(to.path == "/login"){
-		console.log(1);
+	if (to.path == "/login") {
 		//未登录，跳转到/login或/regist的请求；不需拦截
 		next();
-	}else if (to.path == "/system/form.html"){
-		console.log(2);
-		//处理默认跳往首页的，如果是注册界面的需要停留在注册界面
-		next({
-			//path: "/dashboard",
-		})
-	}else{
-		//校验是否登录
-    let self = this;
-    if(to.path == "/"){
-			console.log(3);
-      //访问根目录，定向到首页
-      next({
-        path: "/dashboard",
-      })
-    }else{
-			console.log(4);
-			console.log('=====>', to.path)
+	} else {
+		axios.get(global.urlPrefix + "/login/isLogin")
+			.then(response => {
+				if(response.data.returnResult){
+					if(to.path == "/"){
+						//访问根目录，定向到首页
+						next({
+							path: "/system",
+						})
+					}else{
+						//已登录
+						next();
+					}
 
-      //已登录
-      next();
-    }
-		// axios.get(global.urlPrefix + "/subject/isLogin")
-		// 	.then(response => {
-		// 		if(response.data.flag){
-		// 			if(to.path == "/"){
-		// 				//访问根目录，定向到首页
-		// 				next({
-		// 					path: "/dashboard",
-		// 				})
-		// 			}else{
-		// 				//已登录
-		// 				next();
-		// 			}
-
-		// 		}else{
-		// 			//未登录
-		// 			next({
-		// 				path: "/login",
-		// 			})
-		// 		}
-		// 	}).catch(response =>{
-		// 		//未登录
-		// 		next({
-		// 			path: "/login",
-		// 		})
-		// 	});
+				}else{
+					//未登录
+					next({
+						path: "/login",
+					})
+				}
+			}).catch(response =>{
+				//未登录
+				next({
+					path: "/login",
+				})
+			});
 	}
 })
 
